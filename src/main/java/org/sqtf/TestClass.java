@@ -44,11 +44,12 @@ final class TestClass extends Loggable {
         startTime = System.currentTimeMillis();
         for (Method testMethod : testMethods) {
             Object instance = clazz.newInstance();
+            long start = System.currentTimeMillis();
             try {
                 testMethod.invoke(instance);
-                resultCache.add(new TestResult(testMethod, null));
+                resultCache.add(new TestResult(testMethod, null, System.currentTimeMillis() - start));
             } catch (InvocationTargetException e) {
-                resultCache.add(new TestResult(testMethod, e.getCause()));
+                resultCache.add(new TestResult(testMethod, e.getCause(), System.currentTimeMillis() - start));
             }
         }
         finishTime = System.currentTimeMillis();

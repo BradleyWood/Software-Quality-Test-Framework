@@ -19,13 +19,16 @@ final class TestResult extends Loggable {
     @Nullable
     private final Throwable exception;
 
-    TestResult(@NotNull final Method testMethod, @Nullable Throwable exception) {
+    private final long elapsedTime;
+
+    TestResult(@NotNull final Method testMethod, @Nullable Throwable exception, final long elapsedTime) {
         if (testMethod.getAnnotation(Test.class) == null)
             throw new IllegalArgumentException("Not a test method: " + testMethod);
         this.expectedException = testMethod.getAnnotation(Test.class).expected();
         this.testMethod = testMethod;
         this.testClass = testMethod.getDeclaringClass();
         this.exception = exception;
+        this.elapsedTime = elapsedTime;
     }
 
     boolean passed() {
@@ -33,11 +36,15 @@ final class TestResult extends Loggable {
                 || (exception != null && exception.getClass().isAssignableFrom(expectedException));
     }
 
+    long getElapsedTime() {
+        return elapsedTime;
+    }
+
     void printBasicResult(@NotNull final PrintStream out, @NotNull final PrintStream err) {
         if (passed()) {
-            out.println("Test: "+ testClass.getName() + " " + testMethod.getName() + "() PASSED");
+            out.println("Test: " + testClass.getName() + " " + testMethod.getName() + "() PASSED, elapsed: " + elapsedTime);
         } else {
-            err.println("Test: "+ testClass.getName() + " " + testMethod.getName() + "() FAILED");
+            err.println("Test: " + testClass.getName() + " " + testMethod.getName() + "() FAILED, elapsed: " + elapsedTime);
         }
     }
 

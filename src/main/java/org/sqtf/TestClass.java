@@ -34,7 +34,7 @@ final class TestClass extends Loggable {
                 .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
     }
 
-    public List<TestResult> runTests() throws IllegalAccessException, InstantiationException {
+    List<TestResult> runTests() throws IllegalAccessException, InstantiationException {
         if (resultCache != null)
             return resultCache;
 

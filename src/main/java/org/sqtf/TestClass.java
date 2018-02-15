@@ -30,7 +30,8 @@ final class TestClass extends Loggable {
 
     private List<Method> getTestMethods() {
         return Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(Test.class) != null)
-                .filter(m -> !Modifier.isStatic(m.getModifiers())).collect(Collectors.toList());
+                .filter(m -> !Modifier.isStatic(m.getModifiers()))
+                .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
     }
 
     public List<TestResult> runTests() throws IllegalAccessException, InstantiationException {

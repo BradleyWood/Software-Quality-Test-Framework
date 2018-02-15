@@ -4,6 +4,10 @@ import java.util.Objects;
 
 public final class Assert {
 
+    public static void fail() {
+        throw new AssertionError();
+    }
+
     public static void fail(String message) {
         throw new AssertionError(message);
     }

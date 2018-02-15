@@ -20,7 +20,11 @@ public final class TestRunner {
                 System.err.println("Cannot find test class: " + className);
             }
         }
-        runTests(classes, true);
+        if (classes.isEmpty()) {
+            System.err.println("No test classes found");
+        } else {
+            runTests(classes, true);
+        }
     }
 
     private static void runTests(final List<Class<?>> classes, final boolean basic) {

@@ -21,6 +21,9 @@ final class TestClass extends Loggable {
     @Nullable
     private List<TestResult> resultCache = null;
 
+    private long startTime = 0;
+    private long finishTime = 0;
+
     TestClass(@NotNull final Class<?> clazz) {
         this.clazz = clazz;
     }
@@ -37,6 +40,7 @@ final class TestClass extends Loggable {
         resultCache = new LinkedList<>();
         List<Method> testMethods = getTestMethods();
 
+        startTime = System.currentTimeMillis();
         for (Method testMethod : testMethods) {
             Object instance = clazz.newInstance();
             try {
@@ -46,16 +50,30 @@ final class TestClass extends Loggable {
                 resultCache.add(new TestResult(testMethod, e.getCause()));
             }
         }
+        finishTime = System.currentTimeMillis();
         return resultCache;
     }
 
     @Override
     void printBasicResult(@NotNull PrintStream out, @NotNull PrintStream err) {
-
+        if (resultCache == null)
+            throw new NullPointerException("Tests have not been run!");
+        int passed = (int) resultCache.stream().filter(TestResult::passed).count();
+        int totalTests = resultCache.size();
+        long elapsed = finishTime - startTime;
+        out.println("Running tests on " + clazz.getName());
+        out.println("Tests run: " + totalTests + ", Failures: " + (totalTests - passed) + " Time: " + elapsed);
     }
 
     @Override
     void printDetailedResult(@NotNull PrintStream out, @NotNull PrintStream err) {
+        if (resultCache == null)
+            throw new NullPointerException("Tests have not been run!");
 
+        printBasicResult(out, err);
+
+        for (TestResult testResult : resultCache) {
+            testResult.printDetailedResult(out, err);
+        }
     }
 }

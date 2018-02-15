@@ -2,7 +2,7 @@ package org.sqtf.assertions;
 
 import java.util.Objects;
 
-public class Assert {
+public final class Assert {
 
     public static void fail(String message) {
         throw new AssertionError(message);

@@ -1,8 +1,8 @@
 package org.sqtf;
 
-public class FailedTestException extends Exception {
+final class FailedTestException extends Exception {
 
-    public FailedTestException() {
+    FailedTestException() {
         super("Test failure");
     }
 }

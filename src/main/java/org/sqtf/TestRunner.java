@@ -1,33 +1,54 @@
 package org.sqtf;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+
+import java.io.*;
+import java.nio.file.*;
 import java.util.LinkedList;
 import java.util.List;
 
 public final class TestRunner {
 
-    private static final String LOG_FOLDER = "target/sqtf-reports/";
+    private static String logFolder = null;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, FailedTestException {
+        final TestClassLoader classLoader = new TestClassLoader(args[0], TestClass.class.getClassLoader());
+
         LinkedList<Class<?>> classes = new LinkedList<>();
-        for (String className : args) {
+
+        String folder = args[0];
+
+        if (args.length > 1)
+            logFolder = args[1];
+
+        Files.walk(Paths.get(folder)).filter(q -> q.toString().endsWith(".class"))
+                .filter(q -> !q.toString().contains("$")).forEach(q -> {
             try {
-                classes.add(Class.forName(className));
-            } catch (ClassNotFoundException e) {
-                System.err.println("Cannot find test class: " + className);
+                String className = q.toString().substring(folder.length()).replace("/", ".")
+                        .replace("\\", ".").replace(".class", "");
+                if (className.startsWith("\\") || className.startsWith("/"))
+                    className = className.substring(1);
+                classes.add(classLoader.findClass(className));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
+        });
+
+        System.out.println();
+        System.out.println("--------------------------------------------------------");
+        System.out.println("T E S T S");
+        System.out.println("--------------------------------------------------------");
+        System.out.println();
+
         if (classes.isEmpty()) {
             System.err.println("No test classes found");
-        } else {
-            runTests(classes, true);
+        } else if (!runTests(classes, true)) {
+            throw new FailedTestException();
         }
+
+        System.out.println();
     }
 
-    private static void runTests(final List<Class<?>> classes, final boolean basic) {
+    private static boolean runTests(final List<Class<?>> classes, final boolean basic) {
         LinkedList<TestResult> results = new LinkedList<>();
         classes.forEach(cl -> {
             try {
@@ -47,6 +68,8 @@ public final class TestRunner {
         stringBuilder.append(" failures");
         System.out.println();
         System.out.println(stringBuilder.toString());
+
+        return successfulTests == totalTests;
     }
 
     private static List<TestResult> runTest(final Class<?> clazz) throws IllegalAccessException, InstantiationException {
@@ -63,15 +86,17 @@ public final class TestRunner {
             tc.printDetailedResult(System.out);
         }
 
-        File file = new File(LOG_FOLDER + clazz.getName() + ".txt");
-        File parent = file.getParentFile().getAbsoluteFile();
-        if (!parent.exists()) {
-            parent.mkdirs();
-        }
-        try {
-            tc.printDetailedResult(new PrintStream(new FileOutputStream(file)));
-        } catch (FileNotFoundException e) {
-            System.err.println("Failed to write logs to file: " + file);
+        if (logFolder != null) {
+            File file = new File(logFolder + clazz.getName() + ".txt");
+            File parent = file.getParentFile().getAbsoluteFile();
+            if (!parent.exists()) {
+                parent.mkdirs();
+            }
+            try {
+                tc.printDetailedResult(new PrintStream(new FileOutputStream(file)));
+            } catch (FileNotFoundException e) {
+                System.err.println("Failed to write logs to file: " + file);
+            }
         }
         return results;
     }

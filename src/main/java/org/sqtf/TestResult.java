@@ -31,6 +31,16 @@ final class TestResult extends Loggable {
         this.elapsedTime = elapsedTime;
     }
 
+    @NotNull
+    Method getTestMethod() {
+        return testMethod;
+    }
+
+    @NotNull
+    Class<?> getTestClass() {
+        return testClass;
+    }
+
     boolean passed() {
         return exception == null && expectedException.equals(Test.NoException.class)
                 || (exception != null && exception.getClass().isAssignableFrom(expectedException));

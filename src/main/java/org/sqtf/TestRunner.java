@@ -41,14 +41,15 @@ public final class TestRunner {
 
         if (classes.isEmpty()) {
             System.err.println("No test classes found");
-        } else if (!runTests(classes, true)) {
+        } else if (!runTests(classes)) {
+            // to cause maven build failure
             throw new FailedTestException();
         }
 
         System.out.println();
     }
 
-    private static boolean runTests(final List<Class<?>> classes, final boolean basic) {
+    private static boolean runTests(final List<Class<?>> classes) {
         LinkedList<TestResult> results = new LinkedList<>();
         classes.forEach(cl -> {
             try {

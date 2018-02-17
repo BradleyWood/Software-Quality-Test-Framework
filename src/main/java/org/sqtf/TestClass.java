@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 final class TestClass extends Loggable {
 
+    private final LinkedList<TestResultListener> listeners = new LinkedList<>();
+
     @NotNull
     private final Class<?> clazz;
 
@@ -26,6 +28,10 @@ final class TestClass extends Loggable {
 
     TestClass(@NotNull final Class<?> clazz) {
         this.clazz = clazz;
+    }
+
+    void addTestResultListener(TestResultListener listener) {
+        this.listeners.add(listener);
     }
 
     private List<Method> getTestMethods() {
@@ -45,12 +51,15 @@ final class TestClass extends Loggable {
         for (Method testMethod : testMethods) {
             Object instance = clazz.newInstance();
             long start = System.currentTimeMillis();
+            TestResult result;
             try {
                 testMethod.invoke(instance);
-                resultCache.add(new TestResult(testMethod, null, System.currentTimeMillis() - start));
+                resultCache.add(result = new TestResult(testMethod, null, System.currentTimeMillis() - start));
             } catch (InvocationTargetException e) {
-                resultCache.add(new TestResult(testMethod, e.getCause(), System.currentTimeMillis() - start));
+                resultCache.add(result = new TestResult(testMethod, e.getCause(), System.currentTimeMillis() - start));
             }
+            final TestResult finalResult = result; // must be effectively final for lambda
+            listeners.forEach(l -> l.testCompleted(finalResult));
         }
         finishTime = System.currentTimeMillis();
         return resultCache;

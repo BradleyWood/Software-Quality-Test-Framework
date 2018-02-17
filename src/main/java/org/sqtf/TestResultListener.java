@@ -2,5 +2,5 @@ package org.sqtf;
 
 public interface TestResultListener {
 
-    void testCompleted(TestResult result);
+    void testCompleted(String owner, String name, boolean passed);
 }

@@ -34,7 +34,7 @@ final class TestClass extends Loggable {
         this.listeners.add(listener);
     }
 
-    private List<Method> getTestMethods() {
+    List<Method> getTestMethods() {
         return Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(Test.class) != null)
                 .filter(m -> !Modifier.isStatic(m.getModifiers()))
                 .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
@@ -59,7 +59,7 @@ final class TestClass extends Loggable {
                 resultCache.add(result = new TestResult(testMethod, e.getCause(), System.currentTimeMillis() - start));
             }
             final TestResult finalResult = result; // must be effectively final for lambda
-            listeners.forEach(l -> l.testCompleted(finalResult));
+            listeners.forEach(l -> l.testCompleted(clazz.getSimpleName(), testMethod.getName(), finalResult.passed()));
         }
         finishTime = System.currentTimeMillis();
         return resultCache;

@@ -55,7 +55,8 @@ public final class TestRunner {
             try {
                 results.addAll(runTest(cl));
             } catch (IllegalAccessException | InstantiationException e) {
-                System.err.println("Cannot instantiate test class, test must have a public 0 arg constructor");
+                System.err.println("Cannot instantiate test class " + cl.getName()
+                        + ", test must have a public 0 arg constructor");
             }
         });
         int successfulTests = (int) results.stream().filter(TestResult::passed).count();

@@ -146,7 +146,7 @@ public final class TestRunner {
         display.initComponents();
         display.setSize(225, 400);
         display.setVisible(true);
-        display.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        display.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         boolean status = true;
         int testsComplete = 0;

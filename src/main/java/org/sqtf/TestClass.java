@@ -30,6 +30,10 @@ final class TestClass extends Loggable {
         this.clazz = clazz;
     }
 
+    Class<?> getTestClass() {
+        return clazz;
+    }
+
     void addTestResultListener(TestResultListener listener) {
         this.listeners.add(listener);
     }

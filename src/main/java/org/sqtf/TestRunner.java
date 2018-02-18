@@ -1,8 +1,15 @@
 package org.sqtf;
 
 
+import org.jetbrains.annotations.NotNull;
+import org.sqtf.annotations.Test;
+
+import javax.swing.*;
 import java.io.*;
+import java.lang.reflect.Method;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,9 +23,19 @@ public final class TestRunner {
         LinkedList<Class<?>> classes = new LinkedList<>();
 
         String folder = args[0];
+        boolean display = false;
 
-        if (args.length > 1)
-            logFolder = args[1];
+        if (args.length > 1) {
+            if (!args[1].equals("-display"))
+                logFolder = args[1];
+            else
+                display = true;
+        }
+
+        if (args.length > 2) {
+            if (args[2].equals("-display"))
+                display = true;
+        }
 
         Files.walk(Paths.get(folder)).filter(q -> q.toString().endsWith(".class"))
                 .filter(q -> !q.toString().contains("$")).forEach(q -> {
@@ -41,9 +58,11 @@ public final class TestRunner {
 
         if (classes.isEmpty()) {
             System.err.println("No test classes found");
-        } else if (!runTests(classes)) {
+        } else if (!display && !runTests(classes)) {
             // to cause maven build failure
             throw new FailedTestException();
+        } else if (display) {
+            display(classes);
         }
 
         System.out.println();
@@ -101,5 +120,52 @@ public final class TestRunner {
             }
         }
         return results;
+    }
+
+    private static void display(@NotNull List<Class<?>> classes) {
+        ArrayList<TestClass> testClasses = new ArrayList<>();
+        TestCaseModel model = new TestCaseModel();
+        int totalTests = 0;
+
+        for (Class<?> clazz : classes) {
+            TestClass tc = new TestClass(clazz);
+            tc.addTestResultListener(model);
+            List<Method> methods = tc.getTestMethods();
+            if (methods.size() <= 0)
+                continue;
+            totalTests += methods.size();
+            TestCase[] testCases = new TestCase[methods.size()];
+            for (int i = 0; i < testCases.length; i++) {
+                testCases[i] = new TestCase(clazz.getSimpleName(), methods.get(i).getName());
+            }
+            model.addClass(clazz.getSimpleName(), testCases);
+            testClasses.add(tc);
+        }
+
+        Display display = new Display(model);
+        display.initComponents();
+        display.setSize(225, 400);
+        display.setVisible(true);
+        display.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        boolean status = true;
+        int testsComplete = 0;
+
+        for (TestClass testClass : testClasses) {
+            try {
+                List<TestResult> results = testClass.runTests();
+                testsComplete += results.size();
+                boolean pass = results.size() == results.stream().filter(TestResult::passed).count();
+                model.updateClass(testClass.getTestClass().getSimpleName(), pass);
+                if (!pass)
+                    status = false;
+            } catch (IllegalAccessException | InstantiationException e) {
+                totalTests += testClass.getTestMethods().size();
+                model.updateClass(testClass.getTestClass().getSimpleName(), status = false);
+                e.printStackTrace();
+            }
+            display.setProgressBar(100 * testsComplete / totalTests, status);
+            display.repaint();
+        }
     }
 }

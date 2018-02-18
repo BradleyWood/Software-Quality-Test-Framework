@@ -28,4 +28,19 @@ public class BasicTest {
     public void testPassException() {
         throw new NullPointerException();
     }
+
+    @Fail
+    @Test(timeout = 1)
+    public void timeoutTest() {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException ignored) {
+        }
+    }
+
+    @Pass
+    @Test(timeout = 5)
+    public void timeoutTest2() {
+
+    }
 }

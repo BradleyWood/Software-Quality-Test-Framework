@@ -21,6 +21,11 @@ public class TestClassLoader extends ClassLoader {
     @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
         File file = new File(folder, name.replace(".", "/") + ".class");
+
+        Class<?> cl = super.findLoadedClass(name);
+        if (cl != null)
+            return cl;
+
         if (file.exists()) {
             try {
                 byte[] bytes = Files.readAllBytes(Paths.get(file.toURI()));

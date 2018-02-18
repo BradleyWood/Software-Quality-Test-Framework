@@ -18,9 +18,13 @@ final class TestCaseCellRenderer implements TreeCellRenderer {
     TestCaseCellRenderer() {
         label = new JLabel();
         try {
-            pass = new ImageIcon(ImageIO.read(new File("checkmark.png")), "Test Passed");
-            fail = new ImageIcon(ImageIO.read(new File("fail.png")), "Test Failed");
-            inProgress = new ImageIcon(ImageIO.read(new File("progress.gif")), "Waiting");
+            ClassLoader cl = Thread.currentThread().getContextClassLoader();
+            pass = new ImageIcon(ImageIO.read(cl.getResourceAsStream("checkmark.png")),
+                    "Test Passed");
+            fail = new ImageIcon(ImageIO.read(cl.getResourceAsStream("fail.png")),
+                    "Test Failed");
+            inProgress = new ImageIcon(ImageIO.read(cl.getResourceAsStream("progress.gif")),
+                    "Waiting");
         } catch (IOException e) {
             e.printStackTrace();
         }

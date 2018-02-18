@@ -48,6 +48,7 @@ final class TestCaseCellRenderer implements TreeCellRenderer {
             }
             return label;
         }
+        label.setIcon(null);
         label.setText(value.toString());
         return label;
     }

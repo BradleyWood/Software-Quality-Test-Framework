@@ -10,7 +10,10 @@ public @interface Test {
 
     @NotNull Class<? extends Throwable> expected() default NoException.class;
 
+    int timeout() default 0;
+
     class NoException extends Throwable {
-        private NoException() {}
+        private NoException() {
+        }
     }
 }

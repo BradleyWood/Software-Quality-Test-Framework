@@ -3,22 +3,34 @@ package org.sqtf;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.sqtf.testclasses.BasicTest;
-import org.sqtf.testclasses.Fail;
-import org.sqtf.testclasses.MathTest;
-import org.sqtf.testclasses.Pass;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.sqtf.testclasses.*;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
+@RunWith(Parameterized.class)
 public class TestClassTest {
 
-    @Test
-    public void testSqtfTests() throws Exception {
-        testSqtfClass(BasicTest.class);
-        testSqtfClass(MathTest.class);
+    private final Class<?> clazz;
+
+    public TestClassTest(final Class<?> clazz) {
+        this.clazz = clazz;
     }
 
-    private void testSqtfClass(Class<?> clazz) throws Exception {
+    @Parameterized.Parameters(name = "{0}")
+    public static Collection<Object[]> getTestClasses() {
+        return Arrays.asList(new Object[][]{
+                {BasicTest.class},
+                {MathTest.class},
+                {BeforeTest.class}
+        });
+    }
+
+    @Test
+    public void testSqtfClass() throws Exception {
         TestClass g = new TestClass(clazz);
         List<TestResult> results = g.runTests();
         for (TestResult result : results) {

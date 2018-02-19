@@ -2,9 +2,12 @@ package org.sqtf;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.sqtf.annotations.After;
+import org.sqtf.annotations.Before;
 import org.sqtf.annotations.Test;
 
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -44,6 +47,32 @@ final class TestClass extends Loggable {
                 .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
     }
 
+    private List<Method> getBeforeMethods() {
+        return Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(Before.class) != null)
+                .filter(m -> !Modifier.isStatic(m.getModifiers()))
+                .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
+    }
+
+    private List<Method> getAfterMethods() {
+        return Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(After.class) != null)
+                .filter(m -> !Modifier.isStatic(m.getModifiers()))
+                .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
+    }
+
+    private void runBeforeMethods(Object instance) throws InvocationTargetException, IllegalAccessException {
+        List<Method> methods = getBeforeMethods();
+        for (Method m : methods) {
+            m.invoke(instance);
+        }
+    }
+
+    private void runAfterMethods(Object instance) throws InvocationTargetException, IllegalAccessException {
+        List<Method> methods = getAfterMethods();
+        for (Method m : methods) {
+            m.invoke(instance);
+        }
+    }
+
     List<TestResult> runTests() throws IllegalAccessException, InstantiationException {
         if (resultCache != null)
             return resultCache;
@@ -59,7 +88,12 @@ final class TestClass extends Loggable {
             int timeout = m.timeout();
 
             ExecutorService executor = Executors.newCachedThreadPool();
-            Callable<Object> task = () -> testMethod.invoke(instance);
+            Callable<Object> task = () -> {
+                runBeforeMethods(instance);
+                testMethod.invoke(instance);
+                runAfterMethods(instance);
+                return null;
+            };
             Future<Object> future = executor.submit(task);
 
             long start = System.currentTimeMillis();

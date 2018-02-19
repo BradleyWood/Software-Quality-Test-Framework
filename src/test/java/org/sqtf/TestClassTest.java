@@ -25,7 +25,8 @@ public class TestClassTest {
         return Arrays.asList(new Object[][]{
                 {BasicTest.class},
                 {MathTest.class},
-                {BeforeTest.class}
+                {BeforeTest.class},
+                {AfterTest.class}
         });
     }
 

@@ -156,12 +156,10 @@ public final class TestRunner {
                 List<TestResult> results = testClass.runTests();
                 testsComplete += results.size();
                 boolean pass = results.size() == results.stream().filter(TestResult::passed).count();
-                model.updateClass(testClass.getTestClass().getSimpleName(), pass);
                 if (!pass)
                     status = false;
             } catch (IllegalAccessException | InstantiationException e) {
                 totalTests += testClass.getTestMethods().size();
-                model.updateClass(testClass.getTestClass().getSimpleName(), status = false);
                 e.printStackTrace();
             }
             display.setProgressBar(100 * testsComplete / totalTests, status);

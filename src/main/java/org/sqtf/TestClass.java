@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 final class TestClass extends Loggable {
@@ -81,6 +82,8 @@ final class TestClass extends Loggable {
         List<Method> testMethods = getTestMethods();
 
         startTime = System.currentTimeMillis();
+        AtomicBoolean testClassPassed = new AtomicBoolean(true);
+
         for (Method testMethod : testMethods) {
             Object instance = clazz.newInstance();
 
@@ -113,11 +116,16 @@ final class TestClass extends Loggable {
                 future.cancel(true);
                 executor.shutdown();
             }
+            if (!result.passed())
+                testClassPassed.set(false);
 
             resultCache.add(result);
             final TestResult finalResult = result; // must be effectively final for lambda
             listeners.forEach(l -> l.testCompleted(clazz.getSimpleName(), testMethod.getName(), finalResult.passed()));
         }
+
+        listeners.forEach(l -> l.classCompleted(clazz.getSimpleName(), testClassPassed.get()));
+
         finishTime = System.currentTimeMillis();
         return resultCache;
     }

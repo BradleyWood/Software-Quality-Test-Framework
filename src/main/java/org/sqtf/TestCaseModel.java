@@ -27,7 +27,8 @@ final class TestCaseModel extends DefaultTreeModel implements TestResultListener
         reload();
     }
 
-    void updateClass(final String className, boolean passed) {
+    @Override
+    public void classCompleted(final String className, boolean passed) {
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) getRoot();
         Enumeration<DefaultMutableTreeNode> testClasses = root.children();
         while (testClasses.hasMoreElements()) {

@@ -26,7 +26,8 @@ public class TestClassTest {
                 {BasicTest.class},
                 {MathTest.class},
                 {BeforeTest.class},
-                {AfterTest.class}
+                {AfterTest.class},
+                {ParameterizedTest.class},
         });
     }
 

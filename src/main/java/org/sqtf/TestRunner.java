@@ -2,14 +2,12 @@ package org.sqtf;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.sqtf.annotations.Test;
 
 import javax.swing.*;
 import java.io.*;
 import java.lang.reflect.Method;
 import java.nio.file.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 

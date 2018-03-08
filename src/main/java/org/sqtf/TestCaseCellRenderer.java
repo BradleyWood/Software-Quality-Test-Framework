@@ -5,7 +5,6 @@ import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 
 final class TestCaseCellRenderer implements TreeCellRenderer {

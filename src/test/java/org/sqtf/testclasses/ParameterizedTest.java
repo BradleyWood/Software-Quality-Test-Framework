@@ -68,4 +68,11 @@ public class ParameterizedTest {
     public void invalidTestParams(int a, String b, String expected) {
         Assert.assertEquals(expected, a + b);
     }
+
+    @Pass
+    @Test
+    @Parameters(csvfile = "testData/string_csv_data.csv", name = "NamedTest $0 + $1 = $2")
+    public void namedTest(String a, String b, String expected) {
+        Assert.assertEquals(expected, a + b);
+    }
 }

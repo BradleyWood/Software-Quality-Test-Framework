@@ -156,11 +156,22 @@ final class TestClass extends Loggable {
             if (params != null) {
                 List<Object[]> testParameterList = getTestParameters(params.csvfile(), testMethod.getParameterTypes());
                 if (testParameterList != null) {
+                    int count = 0;
                     for (Object[] objects : testParameterList) {
                         TestResult result = runTest(testMethod, instance, timeout, objects);
                         resultCache.add(result);
+                        String testName = testMethod.getName() + " [" + count + "]";
+                        if (!params.name().isEmpty()) {
+                            testName = params.name();
+                            for (int i = 0; i < objects.length; i++) {
+                                testName = testName.replace("$"+i, objects[i].toString());
+                            }
+                        }
+                        System.err.println("Name: "+testName);
                         final TestResult finalResult = result; // must be effectively final for lambda
-                        listeners.forEach(l -> l.testCompleted(clazz.getSimpleName(), testMethod.getName(), finalResult.passed()));
+                        final String finalTestName = testName;
+                        listeners.forEach(l -> l.testCompleted(clazz.getSimpleName(), finalTestName, finalResult.passed()));
+                        count++;
                     }
                 } else {
                     TestResult result = new TestResult(testMethod, new InvalidTestException(""), 0);

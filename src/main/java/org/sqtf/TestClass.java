@@ -167,7 +167,7 @@ final class TestClass extends Loggable {
                                 testName = testName.replace("$"+i, objects[i].toString());
                             }
                         }
-                        System.err.println("Name: "+testName);
+                        result.setName(testName);
                         final TestResult finalResult = result; // must be effectively final for lambda
                         final String finalTestName = testName;
                         listeners.forEach(l -> l.testCompleted(clazz.getSimpleName(), finalTestName, finalResult.passed()));

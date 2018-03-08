@@ -22,6 +22,41 @@ public class ParameterizedTest {
 
     @Pass
     @Test
+    @Parameters(csvfile = "testData/add_csv_data.csv")
+    public void parameterizedAdd(byte a, Byte b, byte expected) {
+        Assert.assertEquals(expected, (byte) (a + b));
+    }
+
+    @Pass
+    @Test
+    @Parameters(csvfile = "testData/add_csv_data.csv")
+    public void parameterizedAdd(short a, Short b, short expected) {
+        Assert.assertEquals(expected, (short) (a + b));
+    }
+
+    @Pass
+    @Test
+    @Parameters(csvfile = "testData/add_csv_data.csv")
+    public void parameterizedAdd(long a, Long b, long expected) {
+        Assert.assertEquals(expected, a + b);
+    }
+
+    @Pass
+    @Test
+    @Parameters(csvfile = "testData/add_csv_data.csv")
+    public void parameterizedAdd(float a, Float b, float expected) {
+        Assert.assertTrue(Float.compare(expected, a + b) == 0);
+    }
+
+    @Pass
+    @Test
+    @Parameters(csvfile = "testData/add_csv_data.csv")
+    public void parameterizedAdd(Double a, Double b, double expected) {
+        Assert.assertTrue(Double.compare(expected, a + b) == 0);
+    }
+
+    @Pass
+    @Test
     @Parameters(csvfile = "testData/string_csv_data.csv")
     public void parameterizedStringAdd(String a, String b, String expected) {
         Assert.assertEquals(expected, a + b);

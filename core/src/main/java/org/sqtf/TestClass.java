@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-final class TestClass extends Loggable {
+public final class TestClass extends Loggable {
 
     private final LinkedList<TestResultListener> listeners = new LinkedList<>();
 
@@ -37,7 +37,7 @@ final class TestClass extends Loggable {
     private long startTime = 0;
     private long finishTime = 0;
 
-    TestClass(@NotNull final Class<?> clazz) {
+    public TestClass(@NotNull final Class<?> clazz) {
         this.clazz = clazz;
     }
 
@@ -128,7 +128,7 @@ final class TestClass extends Loggable {
         return parameters;
     }
 
-    List<TestResult> runTests() throws IllegalAccessException, InstantiationException {
+    public List<TestResult> runTests() throws IllegalAccessException, InstantiationException {
         if (resultCache != null)
             return resultCache;
 

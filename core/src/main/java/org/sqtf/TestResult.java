@@ -8,7 +8,7 @@ import org.sqtf.annotations.Test;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
 
-final class TestResult extends Loggable {
+public final class TestResult extends Loggable {
 
     @NotNull
     private final Method testMethod;
@@ -24,11 +24,11 @@ final class TestResult extends Loggable {
     @NotNull
     private String testName;
 
-    TestResult(@NotNull final Method testMethod, @Nullable Throwable exception, final long elapsedTime) {
+    public TestResult(@NotNull final Method testMethod, @Nullable Throwable exception, final long elapsedTime) {
         this(testMethod, exception, elapsedTime, testMethod.getName());
     }
 
-    TestResult(@NotNull final Method testMethod, @Nullable Throwable exception, final long elapsedTime, @NotNull final String testName) {
+    public TestResult(@NotNull final Method testMethod, @Nullable Throwable exception, final long elapsedTime, @NotNull final String testName) {
         if (testMethod.getAnnotation(Test.class) == null)
             throw new IllegalArgumentException("Not a test method: " + testMethod);
         this.expectedException = testMethod.getAnnotation(Test.class).expected();
@@ -40,29 +40,33 @@ final class TestResult extends Loggable {
     }
 
     @NotNull
-    Method getTestMethod() {
+    public Method getTestMethod() {
         return testMethod;
     }
 
     @NotNull
-    Class<?> getTestClass() {
+    public Class<?> getTestClass() {
         return testClass;
     }
 
-    void setName(@NotNull final String testName) {
+    public void setName(@NotNull final String testName) {
         this.testName = testName;
     }
 
-    boolean passed() {
+    public boolean passed() {
         return exception == null && expectedException.equals(Test.NoException.class)
                 || (exception != null && exception.getClass().isAssignableFrom(expectedException));
     }
 
-    long getElapsedTime() {
+    public String getTestName() {
+        return testName;
+    }
+
+    public long getElapsedTime() {
         return elapsedTime;
     }
 
-    void printBasicResult(@NotNull final PrintStream out, @NotNull final PrintStream err) {
+    public void printBasicResult(@NotNull final PrintStream out, @NotNull final PrintStream err) {
         if (passed()) {
             out.println("Test: " + testClass.getName() + " " + testName + "() PASSED, elapsed: " + elapsedTime);
         } else {
@@ -70,7 +74,7 @@ final class TestResult extends Loggable {
         }
     }
 
-    void printDetailedResult(@NotNull final PrintStream out, @NotNull final PrintStream err) {
+    public void printDetailedResult(@NotNull final PrintStream out, @NotNull final PrintStream err) {
         printBasicResult(out, err);
         if (exception == null && !passed()) {
             err.println("Expected excepted: " + expectedException.getName() + " but threw none");

@@ -62,6 +62,10 @@ public final class TestResult extends Loggable {
         return testName;
     }
 
+    public Throwable getException() {
+        return exception;
+    }
+
     public long getElapsedTime() {
         return elapsedTime;
     }

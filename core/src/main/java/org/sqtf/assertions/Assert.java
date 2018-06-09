@@ -75,7 +75,7 @@ public final class Assert {
      */
     public static void assertEquals(Object expected, Object actual) {
         if (!Objects.equals(expected, actual)) {
-            fail("Expected value " + expected.toString() + " but got " + actual);
+            fail("Expected value " + expected + " but got " + actual);
         }
     }
 
@@ -181,7 +181,7 @@ public final class Assert {
      */
     public static void assertNotEqual(Object a, Object b) {
         if (Objects.equals(a, b)) {
-            fail(a.toString() + " should not equal to " + b);
+            fail(a + " should not equal to " + b);
         }
     }
 

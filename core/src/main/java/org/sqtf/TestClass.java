@@ -145,9 +145,9 @@ public final class TestClass extends Loggable {
             Parameters params = testMethod.getAnnotation(Parameters.class);
 
             if (testMethod.getParameterCount() == 0 && params != null || testMethod.getParameterCount() > 0 && params == null) {
-                TestResult result = new TestResult(testMethod, new InvalidTestException(""), 0);
+                final TestResult result = new TestResult(testMethod, new InvalidTestException(""), 0);
                 resultCache.add(result);
-                listeners.forEach(l -> l.testCompleted(clazz.getSimpleName(), testMethod.getName(), false));
+                listeners.forEach(l -> l.testCompleted(result));
                 continue;
             }
 
@@ -158,32 +158,29 @@ public final class TestClass extends Loggable {
                 if (testParameterList != null) {
                     int count = 0;
                     for (Object[] objects : testParameterList) {
-                        TestResult result = runTest(testMethod, instance, timeout, objects);
+                        final TestResult result = runTest(testMethod, instance, timeout, objects);
                         resultCache.add(result);
                         String testName = testMethod.getName() + " [" + count + "]";
                         if (!params.name().isEmpty()) {
                             testName = params.name();
                             for (int i = 0; i < objects.length; i++) {
-                                testName = testName.replace("$"+i, objects[i].toString());
+                                testName = testName.replace("$" + i, objects[i].toString());
                             }
                         }
                         result.setName(testName);
-                        final TestResult finalResult = result; // must be effectively final for lambda
-                        final String finalTestName = testName;
-                        listeners.forEach(l -> l.testCompleted(clazz.getSimpleName(), finalTestName, finalResult.passed()));
+                        listeners.forEach(l -> l.testCompleted(result));
                         count++;
                     }
                 } else {
-                    TestResult result = new TestResult(testMethod, new InvalidTestException(""), 0);
+                    final TestResult result = new TestResult(testMethod, new InvalidTestException(""), 0);
                     resultCache.add(result);
                     final TestResult finalResult = result; // must be effectively final for lambda
-                    listeners.forEach(l -> l.testCompleted(clazz.getSimpleName(), testMethod.getName(), finalResult.passed()));
+                    listeners.forEach(l -> l.testCompleted(result));
                 }
             } else {
-                TestResult result = runTest(testMethod, instance, timeout);
+                final TestResult result = runTest(testMethod, instance, timeout);
                 resultCache.add(result);
-                final TestResult finalResult = result; // must be effectively final for lambda
-                listeners.forEach(l -> l.testCompleted(clazz.getSimpleName(), testMethod.getName(), finalResult.passed()));
+                listeners.forEach(l -> l.testCompleted(result));
             }
         }
 

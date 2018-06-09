@@ -41,14 +41,15 @@ final class TestCaseModel extends DefaultTreeModel implements TestResultListener
     }
 
     @Override
-    public void testCompleted(String owner, String name, boolean passed) {
+    public void testCompleted(final TestResult result) {
+        final String owner = result.getTestClass().getSimpleName();
         List<TestCase> results = list.stream().
                 filter(tc -> owner.equals(tc.getOwner()))
-                .filter(tc -> name.equals(tc.getName()))
+                .filter(tc -> result.getTestName().equals(tc.getName()))
                 .collect(Collectors.toList());
 
         if (results.size() == 1) {
-            results.get(0).setTestStatus(passed ? TestCase.TestStatus.PASSED : TestCase.TestStatus.FAILED);
+            results.get(0).setTestStatus(result.passed() ? TestCase.TestStatus.PASSED : TestCase.TestStatus.FAILED);
         }
     }
 }

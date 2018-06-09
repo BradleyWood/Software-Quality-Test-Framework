@@ -45,7 +45,7 @@ public final class TestClass extends Loggable {
         return clazz;
     }
 
-    public void addTestResultListener(TestResultListener listener) {
+    public void addTestResultListener(final TestResultListener listener) {
         this.listeners.add(listener);
     }
 
@@ -67,21 +67,21 @@ public final class TestClass extends Loggable {
                 .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
     }
 
-    private void runBeforeMethods(Object instance) throws InvocationTargetException, IllegalAccessException {
+    private void runBeforeMethods(final Object instance) throws InvocationTargetException, IllegalAccessException {
         List<Method> methods = getBeforeMethods();
         for (Method m : methods) {
             m.invoke(instance);
         }
     }
 
-    private void runAfterMethods(Object instance) throws InvocationTargetException, IllegalAccessException {
+    private void runAfterMethods(final Object instance) throws InvocationTargetException, IllegalAccessException {
         List<Method> methods = getAfterMethods();
         for (Method m : methods) {
             m.invoke(instance);
         }
     }
 
-    private List<Object[]> getTestParameters(String csvFile, Class<?>[] parameterTypes) {
+    private List<Object[]> getTestParameters(final String csvFile, final Class<?>[] parameterTypes) {
         LinkedList<Object[]> parameters = new LinkedList<>();
         try {
             Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(new FileReader(csvFile));
@@ -189,7 +189,7 @@ public final class TestClass extends Loggable {
         return resultCache;
     }
 
-    private TestResult runTest(Method testMethod, Object instance, long timeout, Object... params) {
+    private TestResult runTest(final Method testMethod, final Object instance,final  long timeout, final Object... params) {
         ExecutorService executor = Executors.newCachedThreadPool();
 
         Callable<Object> task = () -> {
@@ -222,7 +222,7 @@ public final class TestClass extends Loggable {
     }
 
     @Override
-    void printBasicResult(@NotNull PrintStream out, @NotNull PrintStream err) {
+    void printBasicResult(@NotNull final PrintStream out, @NotNull final PrintStream err) {
         if (resultCache == null)
             throw new NullPointerException("Tests have not been run!");
         int passed = (int) resultCache.stream().filter(TestResult::passed).count();
@@ -233,7 +233,7 @@ public final class TestClass extends Loggable {
     }
 
     @Override
-    void printDetailedResult(@NotNull PrintStream out, @NotNull PrintStream err) {
+    void printDetailedResult(@NotNull final PrintStream out, @NotNull final PrintStream err) {
         if (resultCache == null)
             throw new NullPointerException("Tests have not been run!");
 

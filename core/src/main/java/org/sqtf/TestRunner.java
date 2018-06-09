@@ -120,7 +120,7 @@ public final class TestRunner {
         return results;
     }
 
-    private static void display(@NotNull List<Class<?>> classes) {
+    private static void display(@NotNull final List<Class<?>> classes) {
         ArrayList<TestClass> testClasses = new ArrayList<>();
         TestCaseModel model = new TestCaseModel();
         int totalTests = 0;

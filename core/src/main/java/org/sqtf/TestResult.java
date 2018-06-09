@@ -24,11 +24,12 @@ public final class TestResult extends Loggable {
     @NotNull
     private String testName;
 
-    public TestResult(@NotNull final Method testMethod, @Nullable Throwable exception, final long elapsedTime) {
+    public TestResult(@NotNull final Method testMethod, @Nullable final Throwable exception, final long elapsedTime) {
         this(testMethod, exception, elapsedTime, testMethod.getName());
     }
 
-    public TestResult(@NotNull final Method testMethod, @Nullable Throwable exception, final long elapsedTime, @NotNull final String testName) {
+    public TestResult(@NotNull final Method testMethod, @Nullable final Throwable exception, final long elapsedTime,
+                      @NotNull final String testName) {
         if (testMethod.getAnnotation(Test.class) == null)
             throw new IllegalArgumentException("Not a test method: " + testMethod);
         this.expectedException = testMethod.getAnnotation(Test.class).expected();

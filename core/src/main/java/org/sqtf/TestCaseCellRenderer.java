@@ -30,8 +30,9 @@ final class TestCaseCellRenderer implements TreeCellRenderer {
     }
 
     @Override
-    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean selected,
-                                                  boolean expanded, boolean leaf, int row, boolean hasFocus) {
+    public Component getTreeCellRendererComponent(final JTree tree, final Object value, final boolean selected,
+                                                  final boolean expanded, final boolean leaf, final int row,
+                                                  final boolean hasFocus) {
         DefaultMutableTreeNode node = ((DefaultMutableTreeNode) value);
         Object o = node.getUserObject();
         if (o instanceof TestCase) {

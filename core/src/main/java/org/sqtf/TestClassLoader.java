@@ -19,7 +19,7 @@ public class TestClassLoader extends ClassLoader {
     }
 
     @Override
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
+    protected Class<?> findClass(final String name) throws ClassNotFoundException {
         File file = new File(folder, name.replace(".", "/") + ".class");
 
         Class<?> cl = super.findLoadedClass(name);

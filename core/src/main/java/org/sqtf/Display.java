@@ -12,12 +12,12 @@ final class Display extends JFrame {
     private Color PASS_GREEN = new Color(10, 100, 20);
     private Color FAIL_RED = new Color(100, 0, 20);
 
-    Display(TreeModel model) {
+    Display(final TreeModel model) {
         super("Test Results");
         this.model = model;
     }
 
-    void setProgressBar(int progress, boolean pass) {
+    void setProgressBar(final int progress, final boolean pass) {
         progressBar.setValue(progress);
         if (!pass) {
             progressBar.setForeground(FAIL_RED);

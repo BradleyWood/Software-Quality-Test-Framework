@@ -41,11 +41,11 @@ public final class TestClass extends Loggable {
         this.clazz = clazz;
     }
 
-    Class<?> getTestClass() {
+    public Class<?> getTestClass() {
         return clazz;
     }
 
-    void addTestResultListener(TestResultListener listener) {
+    public void addTestResultListener(TestResultListener listener) {
         this.listeners.add(listener);
     }
 

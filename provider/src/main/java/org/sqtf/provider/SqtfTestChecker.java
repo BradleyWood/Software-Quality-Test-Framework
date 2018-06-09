@@ -10,7 +10,8 @@ public class SqtfTestChecker implements ScannerFilter {
 
     @Override
     public boolean accept(final Class testClass) {
-        return Arrays.stream(testClass.getDeclaredMethods()).filter(m -> m.getAnnotation(Test.class) != null)
-                .anyMatch(m -> !Modifier.isStatic(m.getModifiers()) && Modifier.isPublic(m.getModifiers()));
+        return Modifier.isPublic(testClass.getModifiers()) && Arrays.stream(testClass.getDeclaredMethods()).
+                filter(m -> m.getAnnotation(Test.class) != null).anyMatch(m -> !Modifier.isStatic(m.getModifiers()) &&
+                Modifier.isPublic(m.getModifiers()));
     }
 }

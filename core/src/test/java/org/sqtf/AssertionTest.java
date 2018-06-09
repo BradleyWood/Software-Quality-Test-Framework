@@ -41,13 +41,28 @@ public class AssertionTest {
         Assert.assertEquals(null, null);
         Assert.assertEquals(5, 5);
         Assert.assertEquals(true, true);
+        Assert.assertEquals(10.0, 10.01, 0.02);
+        Assert.assertEquals(10.0f, 10.01f, 0.02f);
     }
 
     @Test(expected = AssertionError.class)
     public void testAssertEquals2() {
         Assert.assertEquals("abc", "def");
-        Assert.assertEquals(null, 5);
-        Assert.assertEquals(true, false);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertEquals3() {
+        Assert.assertEquals(10.0, 10.02001, 0.02);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertEquals4() {
+        Assert.assertEquals(10.0f, 10.02001f, 0.02f);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertEquals5() {
+        Assert.assertEquals(10, 20);
     }
 
     @Test
@@ -60,8 +75,30 @@ public class AssertionTest {
     @Test(expected = AssertionError.class)
     public void testAssertNotEqual2() {
         Assert.assertNotEqual("abc", "abc");
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertNotEqual3() {
         Assert.assertNotEqual(null, null);
-        Assert.assertNotEqual(5, 5);
-        Assert.assertNotEqual(true, true);
+    }
+
+    @Test
+    public void testAssertNull() {
+        Assert.assertNull(null);
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertNull2() {
+        Assert.assertNull("");
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertNotNull() {
+        Assert.assertNotNull(null);
+    }
+
+    @Test
+    public void testAssertNotNull2() {
+        Assert.assertNotNull("");
     }
 }

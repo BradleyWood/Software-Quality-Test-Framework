@@ -27,8 +27,7 @@ public final class Assert {
      * @param expression
      */
     public static void assertTrue(boolean expression) {
-        if (!expression)
-            fail("Expression must evaluate to true");
+        assertTrue(expression, "Expression must evaluate to true");
     }
 
     /**
@@ -39,8 +38,9 @@ public final class Assert {
      * @param message    The message to report on failure
      */
     public static void assertTrue(boolean expression, String message) {
-        if (!expression)
+        if (!expression) {
             fail(message);
+        }
     }
 
     /**
@@ -50,8 +50,7 @@ public final class Assert {
      * @param expression The boolean expression to test
      */
     public static void assertFalse(boolean expression) {
-        if (expression)
-            fail("Expression must evaluate to true");
+        assertFalse(expression, "Expression must evaluate to false");
     }
 
     /**
@@ -62,8 +61,7 @@ public final class Assert {
      * @param message    The message to report on failure
      */
     public static void assertFalse(boolean expression, String message) {
-        if (expression)
-            fail(message);
+        assertTrue(!expression, message);
     }
 
     /**
@@ -74,9 +72,7 @@ public final class Assert {
      * @param actual   The actual value
      */
     public static void assertEquals(Object expected, Object actual) {
-        if (!Objects.equals(expected, actual)) {
-            fail("Expected value " + expected + " but got " + actual);
-        }
+        assertEquals(expected, actual, "Expected value " + expected + " but got " + actual);
     }
 
     /**
@@ -180,9 +176,7 @@ public final class Assert {
      * @param b The second object
      */
     public static void assertNotEqual(Object a, Object b) {
-        if (Objects.equals(a, b)) {
-            fail(a + " should not equal to " + b);
-        }
+        assertNotEqual(a, b, a + " should not equal to " + b);
     }
 
     /**

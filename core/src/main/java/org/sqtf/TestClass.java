@@ -174,7 +174,6 @@ public final class TestClass extends Loggable {
                 } else {
                     final TestResult result = new TestResult(testMethod, new InvalidTestException(""), 0);
                     resultCache.add(result);
-                    final TestResult finalResult = result; // must be effectively final for lambda
                     listeners.forEach(l -> l.testCompleted(result));
                 }
             } else {
@@ -211,7 +210,8 @@ public final class TestClass extends Loggable {
             }
             result = new TestResult(testMethod, null, System.currentTimeMillis() - start);
         } catch (TimeoutException | InterruptedException e) {
-            result = new TestResult(testMethod, e, System.currentTimeMillis() - start);
+            result = new TestResult(testMethod, new TestTimeoutException(testMethod.getName(), timeout),
+                    System.currentTimeMillis() - start);
         } catch (ExecutionException e) {
             result = new TestResult(testMethod, e.getCause().getCause(), System.currentTimeMillis() - start);
         } finally {

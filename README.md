@@ -49,9 +49,9 @@ To view the results graphically run with
 
 ```xml
 <dependency>
-    <groupId>org.sqtf</groupId>
-    <artifactId>core</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.github.bradleywood</groupId>
+    <artifactId>sqtf-core</artifactId>
+    <version>1.0</version>
 </dependency>
 ```
 
@@ -63,9 +63,9 @@ Configure the surefire plugin
     <version>2.20.1</version>
     <dependencies>
         <dependency>
-            <groupId>org.sqtf</groupId>
-            <artifactId>provider</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.github.bradleywood</groupId>
+            <artifactId>sqtf-provider</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 </plugin>

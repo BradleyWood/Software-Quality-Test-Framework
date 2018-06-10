@@ -71,6 +71,7 @@ public final class TestResult extends Loggable {
         return elapsedTime;
     }
 
+    @Override
     public void printBasicResult(@NotNull final PrintStream out, @NotNull final PrintStream err) {
         if (passed()) {
             out.println("Test: " + testClass.getName() + " " + testName + "() PASSED, elapsed: " + elapsedTime);
@@ -79,6 +80,7 @@ public final class TestResult extends Loggable {
         }
     }
 
+    @Override
     public void printDetailedResult(@NotNull final PrintStream out, @NotNull final PrintStream err) {
         printBasicResult(out, err);
         if (exception == null && !passed()) {

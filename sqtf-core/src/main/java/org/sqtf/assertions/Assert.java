@@ -24,7 +24,7 @@ public final class Assert {
      * Asserts that the expression is true. If it is not
      * the test will fail
      *
-     * @param expression
+     * @param expression The boolean expression to test
      */
     public static void assertTrue(boolean expression) {
         assertTrue(expression, "Expression must evaluate to true");

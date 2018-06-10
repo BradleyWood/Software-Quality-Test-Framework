@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
+/**
+ * Used to mark a method as a test method. Test methods must be public instance methods.
+ */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Test {
 
@@ -25,6 +28,9 @@ public @interface Test {
      */
     int timeout() default 0;
 
+    /**
+     * Used by default to mark that no exception should occur during the test
+     */
     class NoException extends Throwable {
         private NoException() {
         }

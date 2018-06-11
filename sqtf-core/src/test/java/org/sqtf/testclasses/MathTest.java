@@ -3,7 +3,6 @@ package org.sqtf.testclasses;
 import org.sqtf.annotations.Test;
 import org.sqtf.assertions.Assert;
 
-@Test
 public class MathTest {
 
     @Pass

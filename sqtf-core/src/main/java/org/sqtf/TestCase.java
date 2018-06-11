@@ -1,12 +1,14 @@
 package org.sqtf;
 
+import org.jetbrains.annotations.NotNull;
+
 final class TestCase {
 
     private final String owner;
     private final String name;
     private TestStatus status;
 
-    TestCase(final String owner, final String name) {
+    TestCase(@NotNull final String owner, @NotNull final String name) {
         this.owner = owner;
         this.name = name;
         this.status = TestStatus.WAITING;
@@ -24,7 +26,7 @@ final class TestCase {
         return status;
     }
 
-    void setTestStatus(TestStatus status) {
+    void setTestStatus(@NotNull TestStatus status) {
         this.status = status;
     }
 

@@ -1,5 +1,7 @@
 package org.sqtf;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,17 +11,17 @@ public class TestClassLoader extends ClassLoader {
 
     private final File folder;
 
-    TestClassLoader(final String folder, final ClassLoader parent) {
+    TestClassLoader(@NotNull final String folder, @NotNull final ClassLoader parent) {
         this(new File(folder), parent);
     }
 
-    TestClassLoader(final File folder, final ClassLoader parent) {
+    TestClassLoader(@NotNull final File folder, @NotNull final ClassLoader parent) {
         super(parent);
         this.folder = folder;
     }
 
     @Override
-    protected Class<?> findClass(final String name) throws ClassNotFoundException {
+    protected Class<?> findClass(@NotNull final String name) throws ClassNotFoundException {
         File file = new File(folder, name.replace(".", "/") + ".class");
 
         Class<?> cl = super.findLoadedClass(name);

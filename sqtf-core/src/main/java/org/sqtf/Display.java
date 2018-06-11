@@ -1,5 +1,7 @@
 package org.sqtf;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 import javax.swing.tree.TreeModel;
 import java.awt.*;
@@ -12,7 +14,7 @@ final class Display extends JFrame {
     private Color PASS_GREEN = new Color(10, 100, 20);
     private Color FAIL_RED = new Color(100, 0, 20);
 
-    Display(final TreeModel model) {
+    Display(@NotNull final TreeModel model) {
         super("Test Results");
         this.model = model;
     }

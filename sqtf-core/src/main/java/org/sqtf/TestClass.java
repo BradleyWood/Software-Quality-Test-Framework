@@ -45,43 +45,47 @@ public final class TestClass extends Loggable {
         return clazz;
     }
 
-    public void addTestResultListener(final TestResultListener listener) {
+    public void addTestResultListener(@NotNull final TestResultListener listener) {
         this.listeners.add(listener);
     }
 
+    @NotNull
     List<Method> getTestMethods() {
         return Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(Test.class) != null)
                 .filter(m -> !Modifier.isStatic(m.getModifiers()))
                 .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
     }
 
+    @NotNull
     private List<Method> getBeforeMethods() {
         return Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(Before.class) != null)
                 .filter(m -> !Modifier.isStatic(m.getModifiers()))
                 .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
     }
 
+    @NotNull
     private List<Method> getAfterMethods() {
         return Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(After.class) != null)
                 .filter(m -> !Modifier.isStatic(m.getModifiers()))
                 .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
     }
 
-    private void runBeforeMethods(final Object instance) throws InvocationTargetException, IllegalAccessException {
+    private void runBeforeMethods(@NotNull final Object instance) throws InvocationTargetException, IllegalAccessException {
         List<Method> methods = getBeforeMethods();
         for (Method m : methods) {
             m.invoke(instance);
         }
     }
 
-    private void runAfterMethods(final Object instance) throws InvocationTargetException, IllegalAccessException {
+    private void runAfterMethods(@NotNull final Object instance) throws InvocationTargetException, IllegalAccessException {
         List<Method> methods = getAfterMethods();
         for (Method m : methods) {
             m.invoke(instance);
         }
     }
 
-    private List<Object[]> getTestParameters(final String csvFile, final Class<?>[] parameterTypes) {
+    @Nullable
+    private List<Object[]> getTestParameters(@NotNull final String csvFile, @NotNull final Class<?>[] parameterTypes) {
         LinkedList<Object[]> parameters = new LinkedList<>();
         try {
             Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(new FileReader(csvFile));
@@ -128,6 +132,7 @@ public final class TestClass extends Loggable {
         return parameters;
     }
 
+    @NotNull
     public List<TestResult> runTests() throws IllegalAccessException, InstantiationException {
         if (resultCache != null)
             return resultCache;
@@ -189,7 +194,9 @@ public final class TestClass extends Loggable {
         return resultCache;
     }
 
-    private TestResult runTest(final Method testMethod, final Object instance,final  long timeout, final Object... params) {
+    @NotNull
+    private TestResult runTest(@NotNull final Method testMethod, @NotNull final Object instance,
+                                        @NotNull final long timeout, @NotNull final Object... params) {
         ExecutorService executor = Executors.newCachedThreadPool();
 
         Callable<Object> task = () -> {

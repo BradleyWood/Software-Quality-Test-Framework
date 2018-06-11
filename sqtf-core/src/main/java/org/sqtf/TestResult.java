@@ -59,10 +59,12 @@ public final class TestResult extends Loggable {
                 || (exception != null && exception.getClass().isAssignableFrom(expectedException));
     }
 
+    @NotNull
     public String getTestName() {
         return testName;
     }
 
+    @Nullable
     public Throwable getException() {
         return exception;
     }

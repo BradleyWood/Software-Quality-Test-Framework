@@ -34,6 +34,15 @@ public final class TestClass extends Loggable {
     @Nullable
     private List<TestResult> resultCache = null;
 
+    @Nullable
+    private List<Method> testMethods = null;
+
+    @Nullable
+    private List<Method> beforeMethods = null;
+
+    @Nullable
+    private List<Method> afterMethods = null;
+
     private long startTime = 0;
     private long finishTime = 0;
 
@@ -51,21 +60,30 @@ public final class TestClass extends Loggable {
 
     @NotNull
     List<Method> getTestMethods() {
-        return Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(Test.class) != null)
+        if (testMethods != null)
+            return testMethods;
+
+        return testMethods = Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(Test.class) != null)
                 .filter(m -> !Modifier.isStatic(m.getModifiers()))
                 .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
     }
 
     @NotNull
     private List<Method> getBeforeMethods() {
-        return Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(Before.class) != null)
+        if (beforeMethods != null)
+            return beforeMethods;
+
+        return beforeMethods = Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(Before.class) != null)
                 .filter(m -> !Modifier.isStatic(m.getModifiers()))
                 .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
     }
 
     @NotNull
     private List<Method> getAfterMethods() {
-        return Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(After.class) != null)
+        if (afterMethods != null)
+            return afterMethods;
+
+        return afterMethods = Arrays.stream(clazz.getDeclaredMethods()).filter(m -> m.getAnnotation(After.class) != null)
                 .filter(m -> !Modifier.isStatic(m.getModifiers()))
                 .filter(m -> Modifier.isPublic(m.getModifiers())).collect(Collectors.toList());
     }

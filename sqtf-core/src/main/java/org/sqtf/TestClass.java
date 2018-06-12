@@ -15,9 +15,7 @@ import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Matcher;
@@ -25,6 +23,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class TestClass extends Loggable {
+
+    private static final HashMap<Integer, Collection<Object[]>> parameterCache = new HashMap<>();
 
     private final LinkedList<TestResultListener> listeners = new LinkedList<>();
 
@@ -103,7 +103,13 @@ public final class TestClass extends Loggable {
     }
 
     @Nullable
-    private List<Object[]> getTestParameters(@NotNull final String csvFile, @NotNull final Class<?>[] parameterTypes) {
+    private Collection<Object[]> getTestParameters(@NotNull final String csvFile, @NotNull final Class<?>[] parameterTypes) {
+        int key = Objects.hash(csvFile, Arrays.deepHashCode(parameterTypes));
+
+        if (parameterCache.containsKey(key)) {
+            return parameterCache.get(key);
+        }
+
         LinkedList<Object[]> parameters = new LinkedList<>();
         try {
             Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(new FileReader(csvFile));
@@ -144,6 +150,7 @@ public final class TestClass extends Loggable {
                 }
                 parameters.add(params);
             }
+            parameterCache.put(key, parameters);
         } catch (IOException | NumberFormatException e) {
             return null;
         }
@@ -177,7 +184,7 @@ public final class TestClass extends Loggable {
             int timeout = m.timeout();
 
             if (params != null) {
-                List<Object[]> testParameterList = getTestParameters(params.csvfile(), testMethod.getParameterTypes());
+                Collection<Object[]> testParameterList = getTestParameters(params.csvfile(), testMethod.getParameterTypes());
                 if (testParameterList != null) {
                     int count = 0;
                     for (Object[] objects : testParameterList) {
@@ -214,7 +221,7 @@ public final class TestClass extends Loggable {
 
     @NotNull
     private TestResult runTest(@NotNull final Method testMethod, @NotNull final Object instance,
-                                        @NotNull final long timeout, @NotNull final Object... params) {
+                               @NotNull final long timeout, @NotNull final Object... params) {
         ExecutorService executor = Executors.newCachedThreadPool();
 
         Callable<Object> task = () -> {

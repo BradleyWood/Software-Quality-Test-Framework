@@ -8,6 +8,7 @@ import org.sqtf.annotations.After;
 import org.sqtf.annotations.Before;
 import org.sqtf.annotations.Parameters;
 import org.sqtf.annotations.Test;
+import org.sqtf.data.DataUtils;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,8 +19,6 @@ import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class TestClass extends Loggable {
@@ -120,32 +119,10 @@ public final class TestClass extends Loggable {
                 Object[] params = new Object[parameterTypes.length];
                 for (int i = 0; i < parameterTypes.length; i++) {
                     String value = record.get(i).trim();
-                    Object arg;
-                    if (parameterTypes[i].equals(int.class) || parameterTypes[i].equals(Integer.class)) {
-                        arg = Integer.parseInt(value);
-                    } else if (parameterTypes[i].equals(float.class) || parameterTypes[i].equals(Float.class)) {
-                        arg = Float.parseFloat(value);
-                    } else if (parameterTypes[i].equals(double.class) || parameterTypes[i].equals(Double.class)) {
-                        arg = Double.parseDouble(value);
-                    } else if (parameterTypes[i].equals(boolean.class) || parameterTypes[i].equals(Boolean.class)) {
-                        arg = Boolean.parseBoolean(value);
-                    } else if (parameterTypes[i].equals(long.class) || parameterTypes[i].equals(Long.class)) {
-                        arg = Long.parseLong(value);
-                    } else if (parameterTypes[i].equals(short.class) || parameterTypes[i].equals(Short.class)) {
-                        arg = Short.parseShort(value);
-                    } else if (parameterTypes[i].equals(byte.class) || parameterTypes[i].equals(Byte.class)) {
-                        arg = Byte.parseByte(value);
-                    } else if (parameterTypes[i].equals(String.class)) {
-                        Pattern p = Pattern.compile("\"([^\"]*)\"");
-                        Matcher m = p.matcher(value);
-                        if (m.find()) {
-                            arg = m.group(1);
-                        } else {
-                            arg = value;
-                        }
-                    } else {
+                    Object arg = DataUtils.stringToObj(value, parameterTypes[i]);
+                    if (arg == null)
                         return null;
-                    }
+
                     params[i] = arg;
                 }
                 parameters.add(params);

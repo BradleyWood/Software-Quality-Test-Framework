@@ -1,5 +1,7 @@
 package org.sqtf.data;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +29,75 @@ public class DataUtils {
                 return m.group(1);
             } else {
                 return input;
+            }
+        }
+        return null;
+    }
+
+    public static Number toNumber(final Object obj){
+        if (obj instanceof String) {
+            try {
+                return NumberFormat.getInstance().parse((String) obj);
+            } catch (ParseException e) {
+                return null;
+            }
+        } else if (obj instanceof Number) {
+            return (Number) obj;
+        }
+        return null;
+    }
+
+    public static Integer toInt(final Object obj) {
+        final Number number = toNumber(obj);
+
+        return number == null ? null : number.intValue();
+    }
+
+    public static Long toLong(final Object obj) {
+        final Number number = toNumber(obj);
+
+        return number == null ? null : number.longValue();
+    }
+
+    public static Short toShort(final Object obj) {
+        final Number number = toNumber(obj);
+
+        return number == null ? null : number.shortValue();
+    }
+
+    public static Byte toByte(final Object obj) {
+        final Number number = toNumber(obj);
+
+        return number == null ? null : number.byteValue();
+    }
+
+    public static Float toFloat(final Object obj) {
+        final Number number = toNumber(obj);
+
+        return number == null ? null : number.floatValue();
+    }
+
+    public static Double toDouble(final Object obj) {
+        final Number number = toNumber(obj);
+
+        return number == null ? null : number.doubleValue();
+    }
+
+    public static Boolean toBoolean(final Object obj) {
+        if (obj instanceof Boolean)
+            return (Boolean) obj;
+        if (obj instanceof String)
+            return Boolean.parseBoolean(((String) obj).toLowerCase());
+        return null;
+    }
+
+    public static Character toCharacter(final Object obj) {
+        if (obj instanceof Character)
+            return (Character) obj;
+        if (obj instanceof String) {
+            String str = ((String) obj).replaceAll("\'", "");
+            if (str.length() == 1) {
+                return str.charAt(0);
             }
         }
         return null;

@@ -44,6 +44,26 @@ public class MethodSourceTest {
     public void invalidMethodSourceTest3(int a, int b) {
     }
 
+    @Fail
+    @Test
+    @Parameters(source = "noSuchMethod")
+    public void invalidMethodSourceTest4(int a, int b) {
+    }
+
+    @Pass
+    @Test
+    @Parameters(source = "collectionList")
+    public void testCollectionofLists(int a, int b, int expected) {
+        Assert.assertEquals(expected, a + b);
+    }
+
+    public Collection<List<Integer>> collectionList() {
+        List<List<Integer>> lst = new ArrayList<>();
+        lst.add(Arrays.asList(10, 10, 20));
+        lst.add(Arrays.asList(500, 500, 1000));
+        return lst;
+    }
+
     public Collection methodSource() {
         List<Object[]> lst = new ArrayList<>();
         lst.add(new Object[]{0, 0, 0});

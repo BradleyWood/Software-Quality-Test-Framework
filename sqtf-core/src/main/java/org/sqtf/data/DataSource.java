@@ -6,7 +6,7 @@ public abstract class DataSource {
 
     abstract List<Object[]> loadData(final String source, final Object instance);
 
-    private List<Object[]> loadData(String source, Object instance, Class[] types) {
+    List<Object[]> loadData(String source, Object instance, Class[] types) {
         final List<Object[]> dataFromSource = loadData(source, instance);
         if (dataFromSource != null) {
             final LinkedList<Object[]> testSet = new LinkedList<>();

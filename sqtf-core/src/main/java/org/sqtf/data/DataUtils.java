@@ -103,4 +103,8 @@ public class DataUtils {
         return null;
     }
 
+    public static String toString(final Object obj) {
+        return String.valueOf(obj);
+    }
+
 }

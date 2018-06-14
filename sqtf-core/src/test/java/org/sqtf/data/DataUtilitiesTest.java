@@ -54,6 +54,24 @@ public class DataUtilitiesTest {
     }
 
     @Test
+    public void toFloatTest() {
+        for (Object numberDatum : numberData) {
+            Float floatValue = DataUtils.toFloat(numberDatum);
+            Assert.assertNotNull(floatValue);
+            Assert.assertEquals(0, floatValue, 0.001);
+        }
+    }
+
+    @Test
+    public void toDoubleTest() {
+        for (Object numberDatum : numberData) {
+            Double doubleValue = DataUtils.toDouble(numberDatum);
+            Assert.assertNotNull(doubleValue);
+            Assert.assertEquals(0, doubleValue, 0.001);
+        }
+    }
+
+    @Test
     public void toBoolTest() {
         for (Object numberDatum : booleanData) {
             Boolean byteValue = DataUtils.toBoolean(numberDatum);

@@ -122,7 +122,7 @@ public final class TestClass extends Loggable {
             int timeout = m.timeout();
 
             if (params != null) {
-                final List<Object[]> testParameterList = DataSource.getData(params.csvfile(), instance,
+                final List<Object[]> testParameterList = DataSource.getData(params.source(), instance,
                         testMethod.getParameterTypes());
 
                 if (testParameterList != null) {

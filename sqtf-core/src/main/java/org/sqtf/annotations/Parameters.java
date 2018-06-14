@@ -23,7 +23,7 @@ public @interface Parameters {
      * <br>
      *
      * For example you can annotate your test method as follows
-     * {@code @Parameters(csvfile = "test.csv", name="Test $0, $1, $2")}
+     * {@code @Parameters(source = "test.csv", name="Test $0, $1, $2")}
      *
      * @return The string template for the test name
      */
@@ -33,8 +33,8 @@ public @interface Parameters {
      *
      * Marks the location of the test data
      *
-     * @return The path to csv file
+     * @return The the source of the data
      */
-    String csvfile();
+    String source();
 
 }

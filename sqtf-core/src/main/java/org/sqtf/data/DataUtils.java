@@ -1,5 +1,8 @@
 package org.sqtf.data;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.regex.Matcher;
@@ -7,34 +10,40 @@ import java.util.regex.Pattern;
 
 public class DataUtils {
 
-    public static Object stringToObj(final String input, final Class<?> type) {
+    @Nullable
+    public static Object toType(@Nullable final Object input, @NotNull final Class<?> type) {
         if (type.equals(int.class) || type.equals(Integer.class)) {
-            return Integer.parseInt(input);
+            return toInt(input);
         } else if (type.equals(float.class) || type.equals(Float.class)) {
-            return Float.parseFloat(input);
+            return toFloat(input);
         } else if (type.equals(double.class) || type.equals(Double.class)) {
-            return Double.parseDouble(input);
+            return toDouble(input);
         } else if (type.equals(boolean.class) || type.equals(Boolean.class)) {
-            return Boolean.parseBoolean(input);
+            return toBoolean(input);
         } else if (type.equals(long.class) || type.equals(Long.class)) {
-            return Long.parseLong(input);
+            return toLong(input);
         } else if (type.equals(short.class) || type.equals(Short.class)) {
-            return Short.parseShort(input);
+            return toShort(input);
         } else if (type.equals(byte.class) || type.equals(Byte.class)) {
-            return Byte.parseByte(input);
+            return toByte(input);
         } else if (type.equals(String.class)) {
-            Pattern p = Pattern.compile("\"([^\"]*)\"");
-            Matcher m = p.matcher(input);
-            if (m.find()) {
-                return m.group(1);
+            if (input instanceof String) {
+                Pattern p = Pattern.compile("\"([^\"]*)\"");
+                Matcher m = p.matcher((String) input);
+                if (m.find()) {
+                    return m.group(1);
+                } else {
+                    return input;
+                }
             } else {
-                return input;
+                return toString(input);
             }
         }
         return null;
     }
 
-    public static Number toNumber(final Object obj){
+    @Nullable
+    public static Number toNumber(@Nullable final Object obj){
         if (obj instanceof String) {
             try {
                 return NumberFormat.getInstance().parse((String) obj);
@@ -47,43 +56,50 @@ public class DataUtils {
         return null;
     }
 
-    public static Integer toInt(final Object obj) {
+    @Nullable
+    public static Integer toInt(@Nullable final Object obj) {
         final Number number = toNumber(obj);
 
         return number == null ? null : number.intValue();
     }
 
-    public static Long toLong(final Object obj) {
+    @Nullable
+    public static Long toLong(@Nullable final Object obj) {
         final Number number = toNumber(obj);
 
         return number == null ? null : number.longValue();
     }
 
-    public static Short toShort(final Object obj) {
+    @Nullable
+    public static Short toShort(@Nullable final Object obj) {
         final Number number = toNumber(obj);
 
         return number == null ? null : number.shortValue();
     }
 
-    public static Byte toByte(final Object obj) {
+    @Nullable
+    public static Byte toByte(@Nullable final Object obj) {
         final Number number = toNumber(obj);
 
         return number == null ? null : number.byteValue();
     }
 
-    public static Float toFloat(final Object obj) {
+    @Nullable
+    public static Float toFloat(@Nullable final Object obj) {
         final Number number = toNumber(obj);
 
         return number == null ? null : number.floatValue();
     }
 
-    public static Double toDouble(final Object obj) {
+    @Nullable
+    public static Double toDouble(@Nullable final Object obj) {
         final Number number = toNumber(obj);
 
         return number == null ? null : number.doubleValue();
     }
 
-    public static Boolean toBoolean(final Object obj) {
+    @Nullable
+    public static Boolean toBoolean(@Nullable final Object obj) {
         if (obj instanceof Boolean)
             return (Boolean) obj;
         if (obj instanceof String)
@@ -91,7 +107,8 @@ public class DataUtils {
         return null;
     }
 
-    public static Character toCharacter(final Object obj) {
+    @Nullable
+    public static Character toCharacter(@Nullable final Object obj) {
         if (obj instanceof Character)
             return (Character) obj;
         if (obj instanceof String) {
@@ -103,7 +120,8 @@ public class DataUtils {
         return null;
     }
 
-    public static String toString(final Object obj) {
+    @NotNull
+    public static String toString(@Nullable final Object obj) {
         return String.valueOf(obj);
     }
 

@@ -119,7 +119,7 @@ public final class TestClass extends Loggable {
                 Object[] params = new Object[parameterTypes.length];
                 for (int i = 0; i < parameterTypes.length; i++) {
                     String value = record.get(i).trim();
-                    Object arg = DataUtils.stringToObj(value, parameterTypes[i]);
+                    Object arg = DataUtils.toType(value, parameterTypes[i]);
                     if (arg == null)
                         return null;
 

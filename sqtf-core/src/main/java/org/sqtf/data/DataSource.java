@@ -32,20 +32,19 @@ public abstract class DataSource {
     }
 
     public static List<Object[]> getData(final String source, Object instance, Class[] classes) {
-        return null;
-//        DataSource dataSource;
-//        if (source.endsWith(".csv")) {
-//            dataSource = CsvSource.INSTANCE;
-//        } else {
-//            return null; // unsupported data source
-//        }
-//
-//
-//        try {
-//            return dataSource.loadData(source, instance, classes);
-//        } catch (NumberFormatException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
+        DataSource dataSource;
+        if (source.endsWith(".csv")) {
+            dataSource = CsvSource.INSTANCE;
+        } else {
+            return null; // unsupported data source
+        }
+
+
+        try {
+            return dataSource.loadData(source, instance, classes);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

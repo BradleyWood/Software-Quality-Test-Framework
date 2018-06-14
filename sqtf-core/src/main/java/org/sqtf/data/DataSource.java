@@ -36,7 +36,7 @@ public abstract class DataSource {
         if (source.endsWith(".csv")) {
             dataSource = CsvSource.INSTANCE;
         } else {
-            return null; // unsupported data source
+            dataSource = MethodSource.INSTANCE;
         }
 
         return dataSource.loadData(source, instance, classes);

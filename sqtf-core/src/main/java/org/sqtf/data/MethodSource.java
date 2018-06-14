@@ -23,7 +23,7 @@ class MethodSource extends DataSource {
                 return null;
             }
 
-            Collection<?> collection;
+            Collection collection;
 
             if (Modifier.isStatic(method.getModifiers())) {
                 collection = (Collection<?>) method.invoke(null);
@@ -31,16 +31,19 @@ class MethodSource extends DataSource {
                 collection = (Collection<?>) method.invoke(instance);
             }
 
+            final List<Object[]> testSet = new ArrayList<>();
+
             for (Object o : collection) {
-                if (!(o instanceof Object[]))
+                if (o instanceof Collection) {
+                    testSet.add(((Collection) o).toArray());
+                } else if (!(o instanceof Object[])) {
                     return null;
+                } else {
+                    testSet.add((Object[]) o);
+                }
             }
 
-            if (collection instanceof List) {
-                return (List<Object[]>) collection;
-            } else {
-                return new ArrayList(collection);
-            }
+            return testSet;
 
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             return null;

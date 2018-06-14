@@ -39,12 +39,6 @@ public abstract class DataSource {
             return null; // unsupported data source
         }
 
-
-        try {
-            return dataSource.loadData(source, instance, classes);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return dataSource.loadData(source, instance, classes);
     }
 }

@@ -1,17 +1,13 @@
 package org.sqtf;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sqtf.annotations.After;
 import org.sqtf.annotations.Before;
 import org.sqtf.annotations.Parameters;
 import org.sqtf.annotations.Test;
-import org.sqtf.data.DataUtils;
+import org.sqtf.data.DataSource;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,8 +18,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public final class TestClass extends Loggable {
-
-    private static final HashMap<Integer, Collection<Object[]>> parameterCache = new HashMap<>();
 
     private final LinkedList<TestResultListener> listeners = new LinkedList<>();
 
@@ -101,39 +95,6 @@ public final class TestClass extends Loggable {
         }
     }
 
-    @Nullable
-    private Collection<Object[]> getTestParameters(@NotNull final String csvFile, @NotNull final Class<?>[] parameterTypes) {
-        int key = Objects.hash(csvFile, Arrays.deepHashCode(parameterTypes));
-
-        if (parameterCache.containsKey(key)) {
-            return parameterCache.get(key);
-        }
-
-        LinkedList<Object[]> parameters = new LinkedList<>();
-        try {
-            Iterable<CSVRecord> records = CSVFormat.EXCEL.parse(new FileReader(csvFile));
-            for (CSVRecord record : records) {
-                if (record.size() < parameterTypes.length) {
-                    continue;
-                }
-                Object[] params = new Object[parameterTypes.length];
-                for (int i = 0; i < parameterTypes.length; i++) {
-                    String value = record.get(i).trim();
-                    Object arg = DataUtils.toType(value, parameterTypes[i]);
-                    if (arg == null)
-                        return null;
-
-                    params[i] = arg;
-                }
-                parameters.add(params);
-            }
-            parameterCache.put(key, parameters);
-        } catch (IOException | NumberFormatException e) {
-            return null;
-        }
-        return parameters;
-    }
-
     @NotNull
     public List<TestResult> runTests() throws IllegalAccessException, InstantiationException {
         if (resultCache != null)
@@ -161,7 +122,9 @@ public final class TestClass extends Loggable {
             int timeout = m.timeout();
 
             if (params != null) {
-                Collection<Object[]> testParameterList = getTestParameters(params.csvfile(), testMethod.getParameterTypes());
+                final List<Object[]> testParameterList = DataSource.getData(params.csvfile(), instance,
+                        testMethod.getParameterTypes());
+
                 if (testParameterList != null) {
                     int count = 0;
                     for (Object[] objects : testParameterList) {

@@ -4,10 +4,7 @@ import org.sqtf.annotations.Parameters;
 import org.sqtf.annotations.Test;
 import org.sqtf.assertions.Assert;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class MethodSourceTest {
 
@@ -55,6 +52,13 @@ public class MethodSourceTest {
     @Parameters(source = "collectionList")
     public void testCollectionofLists(int a, int b, int expected) {
         Assert.assertEquals(expected, a + b);
+    }
+
+    @Fail
+    @Test
+    @Parameters(source = "methodSource")
+    public void testNoParams() {
+
     }
 
     public Collection<List<Integer>> collectionList() {

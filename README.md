@@ -71,7 +71,7 @@ public void parameterizedAdd(int a, int b, int expected) {
     Assert.assertEquals(expected, a + b);
 }
 
-public Collection methodSource() {
+public Collection dataGenerator() {
     List<Object[]> lst = new ArrayList<>();
     lst.add(Arrays.asList(0, 0, 0));
     lst.add(Arrays.asList(10, 20, 30));

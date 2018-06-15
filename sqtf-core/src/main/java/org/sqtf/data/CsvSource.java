@@ -8,10 +8,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-class CsvSource extends DataSource {
-
-    private CsvSource() {
-    }
+public class CsvSource extends DataSource {
 
     @Override
     List<Object[]> loadData(String source, Object instance) {
@@ -33,5 +30,9 @@ class CsvSource extends DataSource {
         return data;
     }
 
-    static CsvSource INSTANCE = new CsvSource();
+    @Override
+    boolean accept(String source, Object instance, Class[] classes) {
+        return source.trim().toLowerCase().endsWith(".csv");
+    }
+
 }

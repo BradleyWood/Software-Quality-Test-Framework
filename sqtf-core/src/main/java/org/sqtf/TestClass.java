@@ -1,13 +1,19 @@
 package org.sqtf;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sqtf.annotations.After;
 import org.sqtf.annotations.Before;
 import org.sqtf.annotations.Parameters;
 import org.sqtf.annotations.Test;
+import org.sqtf.data.CsvSource;
 import org.sqtf.data.DataSource;
+import org.sqtf.data.MethodSource;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,6 +41,11 @@ public final class TestClass extends Loggable {
 
     @Nullable
     private List<Method> afterMethods = null;
+
+    static {
+        DataSource.addDataSource(new CsvSource());
+        DataSource.addDataSource(new MethodSource());
+    }
 
     private long startTime = 0;
     private long finishTime = 0;

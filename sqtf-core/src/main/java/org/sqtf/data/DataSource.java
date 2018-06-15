@@ -4,7 +4,7 @@ import java.util.*;
 
 public abstract class DataSource {
 
-    abstract List<Object[]> loadData(final String source, final Object instance);
+    private static LinkedList<DataSource> dataSources = new LinkedList<>();
 
     List<Object[]> loadData(String source, Object instance, Class[] types) {
         final List<Object[]> dataFromSource = loadData(source, instance);
@@ -31,14 +31,25 @@ public abstract class DataSource {
         return null;
     }
 
-    public static List<Object[]> getData(final String source, Object instance, Class[] classes) {
-        DataSource dataSource;
-        if (source.endsWith(".csv")) {
-            dataSource = CsvSource.INSTANCE;
-        } else {
-            dataSource = MethodSource.INSTANCE;
+    public static void addDataSource(final DataSource dataSource) {
+        dataSources.add(dataSource);
+    }
+
+    public static void removeDataSource(final DataSource dataSource) {
+        dataSources.remove(dataSource);
+    }
+
+    abstract List<Object[]> loadData(final String source, final Object instance);
+
+    abstract boolean accept(String source, Object instance, Class[] classes);
+
+    public static List<Object[]> getData(final String source, final Object instance, final Class[] classes) {
+        for (DataSource dataSource : dataSources) {
+            if (dataSource.accept(source, instance, classes)) {
+                return dataSource.loadData(source, instance, classes);
+            }
         }
 
-        return dataSource.loadData(source, instance, classes);
+        return null;
     }
 }

@@ -7,10 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-class MethodSource extends DataSource {
-
-    private MethodSource() {
-    }
+public class MethodSource extends DataSource {
 
     @Override
     List<Object[]> loadData(final String source, final Object instance) {
@@ -50,5 +47,17 @@ class MethodSource extends DataSource {
         }
     }
 
-    static MethodSource INSTANCE = new MethodSource();
+    @Override
+    boolean accept(String source, Object instance, Class[] classes) {
+        final Class<?> clazz = instance.getClass();
+
+        try {
+            final Method method = clazz.getMethod(source);
+
+            return Collection.class.isAssignableFrom(method.getReturnType());
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
 }

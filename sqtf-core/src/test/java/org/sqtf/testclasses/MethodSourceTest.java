@@ -61,6 +61,17 @@ public class MethodSourceTest {
 
     }
 
+    @Pass
+    @Test
+    @Parameters(source = "emptyCollection")
+    public void testEmptyCollection(int a, int b, int c) {
+
+    }
+
+    public Collection emptyCollection() {
+        return new LinkedList();
+    }
+
     public Collection<List<Integer>> collectionList() {
         List<List<Integer>> lst = new ArrayList<>();
         lst.add(Arrays.asList(10, 10, 20));

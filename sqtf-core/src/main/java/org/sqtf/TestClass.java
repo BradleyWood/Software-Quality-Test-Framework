@@ -1,6 +1,5 @@
 package org.sqtf;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sqtf.annotations.After;
@@ -11,9 +10,6 @@ import org.sqtf.data.CsvSource;
 import org.sqtf.data.DataSource;
 import org.sqtf.data.MethodSource;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -172,7 +168,7 @@ public final class TestClass extends Loggable {
 
     @NotNull
     private TestResult runTest(@NotNull final Method testMethod, @NotNull final Object instance,
-                               @NotNull final long timeout, @NotNull final Object... params) {
+                               final long timeout, @NotNull final Object... params) {
         ExecutorService executor = Executors.newCachedThreadPool();
 
         Callable<Object> task = () -> {

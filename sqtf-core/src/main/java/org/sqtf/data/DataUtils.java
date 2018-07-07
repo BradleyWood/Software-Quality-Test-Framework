@@ -1,14 +1,19 @@
 package org.sqtf.data;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class DataUtils {
+
+    private static final Gson gson = new Gson();
 
     @Nullable
     static Object toType(@Nullable final Object input, @NotNull final Class<?> type) {
@@ -40,6 +45,11 @@ class DataUtils {
             } else {
                 return toString(input);
             }
+        } else if (type.equals(Object.class)) {
+            return input;
+        } else if (input instanceof Map) {
+            final JsonElement element = gson.toJsonTree(input);
+            return gson.fromJson(element, type);
         }
         return null;
     }

@@ -24,6 +24,7 @@ public class CsvSource extends DataSource {
                 data.add(columnData);
             }
         } catch (IOException e) {
+            e.printStackTrace();
             return null;
         }
 

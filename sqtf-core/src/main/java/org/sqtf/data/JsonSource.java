@@ -3,7 +3,6 @@ package org.sqtf.data;
 import com.google.gson.Gson;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +15,8 @@ public class JsonSource extends DataSource {
     List<Object[]> loadData(final String source, final Object instance) {
         try {
             return Arrays.asList(gson.fromJson(new InputStreamReader(new FileInputStream(source)), Object[][].class));
-        } catch (final FileNotFoundException ignored) {
+        } catch (final Throwable e) {
+            e.printStackTrace();
         }
         return null;
     }

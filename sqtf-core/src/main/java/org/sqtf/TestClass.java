@@ -8,6 +8,7 @@ import org.sqtf.annotations.Parameters;
 import org.sqtf.annotations.Test;
 import org.sqtf.data.CsvSource;
 import org.sqtf.data.DataSource;
+import org.sqtf.data.JsonSource;
 import org.sqtf.data.MethodSource;
 
 import java.io.PrintStream;
@@ -41,6 +42,7 @@ public final class TestClass extends Loggable {
     static {
         DataSource.addDataSource(new CsvSource());
         DataSource.addDataSource(new MethodSource());
+        DataSource.addDataSource(new JsonSource());
     }
 
     private long startTime = 0;

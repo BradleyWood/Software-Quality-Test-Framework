@@ -57,6 +57,13 @@ public class ParameterizedTest {
 
     @Pass
     @Test
+    @Parameters(source = "testData/add_csv_data.csv")
+    public void parameterizedAdd(Number a, Number b, Number expected) {
+        Assert.assertTrue(Double.compare(expected.doubleValue(), a.doubleValue() + b.doubleValue()) == 0);
+    }
+
+    @Pass
+    @Test
     @Parameters(source = "testData/string_csv_data.csv")
     public void parameterizedStringAdd(String a, String b, String expected) {
         Assert.assertEquals(expected, a + b);

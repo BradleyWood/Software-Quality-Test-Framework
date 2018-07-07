@@ -26,6 +26,8 @@ class DataUtils {
             return toShort(input);
         } else if (type.equals(byte.class) || type.equals(Byte.class)) {
             return toByte(input);
+        } else if (type.equals(Number.class)) {
+            return toNumber(input);
         } else if (type.equals(String.class)) {
             if (input instanceof String) {
                 Pattern p = Pattern.compile("\"([^\"]*)\"");

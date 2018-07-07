@@ -41,4 +41,15 @@ public class JsonSourceTest {
     @Parameters(source = "testData/add_json_data.json")
     public void testAddJsonSource(boolean a, String b, String c) {
     }
+
+    class Person {
+        String name;
+    }
+
+    @Test
+    @Pass
+    @Parameters(source = "testData/json_object.json")
+    public void testAddJsonSource(Person obj) {
+        Assert.assertNotNull(obj.name);
+    }
 }

@@ -28,7 +28,8 @@ public class TestClassTest {
                 {BeforeTest.class},
                 {AfterTest.class},
                 {ParameterizedTest.class},
-                {MethodSourceTest.class}
+                {MethodSourceTest.class},
+                {JsonSourceTest.class}
         });
     }
 

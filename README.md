@@ -88,7 +88,7 @@ public Collection dataGenerator() {
 <dependency>
     <groupId>com.github.bradleywood</groupId>
     <artifactId>sqtf-core</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 
@@ -102,7 +102,7 @@ Configure the surefire plugin
         <dependency>
             <groupId>com.github.bradleywood</groupId>
             <artifactId>sqtf-provider</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
     </dependencies>
 </plugin>

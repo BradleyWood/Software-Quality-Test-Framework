@@ -80,6 +80,31 @@ public Collection dataGenerator() {
 }
 ```
 
+#### Use test data from a json file
+
+```json
+[
+  [
+    {
+      "name": "Brad"
+    }
+  ]
+]
+```
+
+The data can automatically be converted to objects or primitive types.
+
+```java
+class Person {
+    String name;
+}
+
+@Test
+@Parameters(source = "testData/json_object.json")
+public void testAddJsonSource(Person obj) {
+    Assert.assertNotNull(obj.name);
+}
+```
 
 ## Maven integration
 
